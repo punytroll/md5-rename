@@ -3,8 +3,9 @@ import re
 import sys
 import hashlib
 
-md5_pattern = re.compile("^[0123456789abcdefABCDEF]{32,32}$")
+md5_pattern = re.compile("^[0123456789abcdefABCDEF]{32,32}(\..+)?$")
 keep_existing = False
+keep_extensions = False
 verbose = False
 recursive = False
 
@@ -36,6 +37,8 @@ def process_item(item_path):
 			else:
 				md5_name = get_file_md5(item_path)
 				md5_path = os.path.join(os.path.dirname(item_path), md5_name)
+				if keep_extensions == True:
+					md5_path += os.path.splitext(item_path)[1]
 				if verbose == True:
 					print "Renaming '" + item_path + "'\n      to '" + md5_path + "'."
 				os.rename(item_path, md5_path)
@@ -51,6 +54,10 @@ for item_name in sys.argv[1:]:
 		keep_existing = True
 	elif item_name == "--override-existing":
 		keep_existing = False
+	elif item_name == "--keep-extensions":
+		keep_extensions = True
+	elif item_name == "--remove-extensions":
+		keep_extensions == False
 	elif item_name == "--verbose":
 		verbose = True
 	elif item_name == "--silent":
