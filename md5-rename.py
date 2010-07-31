@@ -44,27 +44,38 @@ def process_item(item_path):
 				os.rename(item_path, md5_path)
 		else:
 			if verbose == True:
-				print "Ignoring '" + item_path + "'."
+				print "Skipping '" + item_path + "'."
 	else:
 		if verbose == True:
 			print "Item '" + item_path + "' doesn't exist."
 
-for item_name in sys.argv[1:]:
-	if item_name == "--keep-existing":
-		keep_existing = True
-	elif item_name == "--override-existing":
-		keep_existing = False
-	elif item_name == "--keep-extensions":
-		keep_extensions = True
-	elif item_name == "--remove-extensions":
-		keep_extensions == False
-	elif item_name == "--verbose":
-		verbose = True
-	elif item_name == "--silent":
-		verbose = False
-	elif item_name == "--recursive":
-		recursive = True
-	elif item_name == "--not-recursive":
-		recursive = False
-	else:
-		process_item(os.path.abspath(item_name))
+if "--help" in sys.argv[1:]:
+	print "MD5 Rename"
+	print "  --keep-existing     Does not try to rename files with an md5 name."
+	print "  --override-existing Renames files that already have an md5 name."
+	print "  --keep-extensions   Renamed files will still have their original extensions."
+	print "  --remove-extensions Removes the extensions from renamed files."
+	print "  --verbose           Prints what it does."
+	print "  --silent            Does not utter a word."
+	print "  --recursive         Descends into directories."
+	print "  --not-recursive     Skips sub directories."
+else:
+	for item_name in sys.argv[1:]:
+		if item_name == "--keep-existing":
+			keep_existing = True
+		elif item_name == "--override-existing":
+			keep_existing = False
+		elif item_name == "--keep-extensions":
+			keep_extensions = True
+		elif item_name == "--remove-extensions":
+			keep_extensions == False
+		elif item_name == "--verbose":
+			verbose = True
+		elif item_name == "--silent":
+			verbose = False
+		elif item_name == "--recursive":
+			recursive = True
+		elif item_name == "--not-recursive":
+			recursive = False
+		else:
+			process_item(os.path.abspath(item_name))
