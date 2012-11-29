@@ -39,9 +39,17 @@ def process_item(item_path):
 				md5_path = os.path.join(os.path.dirname(item_path), md5_name)
 				if keep_extensions == True:
 					md5_path += os.path.splitext(item_path)[1]
-				if verbose == True:
-					print "Renaming '" + item_path + "'\n      to '" + md5_path + "'."
-				os.rename(item_path, md5_path)
+				try:
+					os.lstat(md5_path)
+					if verbose == True:
+						if md5_path == item_path:
+							print "Renaming '" + item_path + "'\n      to '" + md5_path + "' not necessary."
+						else:
+							print "Skipping '" + item_path + "'\n      to '" + md5_path + "' because the target already exists."
+				except OSError as exception:
+					if verbose == True:
+						print "Renaming '" + item_path + "'\n      to '" + md5_path + "'."
+					os.rename(item_path, md5_path)
 		else:
 			if verbose == True:
 				print "Skipping '" + item_path + "'."
